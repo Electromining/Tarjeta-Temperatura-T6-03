@@ -27,6 +27,9 @@ typedef struct struct_message {
   int muestras;
   int micro;
 } struct_message;
+
+// Create a struct_message called tempReadings 
+struct_message tempReadings;
 // Create a struct_message to hold incoming from esp_now.
 struct_message wirelessReadings;
 // Variable to store if sending data was successful
