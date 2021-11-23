@@ -5,6 +5,13 @@
 #include <esp_now.h>
 #include <WiFi.h>
 
+#include "esp32-hal-adc.h" // needed for adc pin reset
+#include "soc/sens_reg.h" // needed for adc pin reset
+uint64_t reg_b; // Used to store Pin registers
+
+#define PIN 13 // Set ADC2 Pin here
+int value;
+
 //  THE MAC Address of your receiver 
 //  Mi receptor será  8C:AA:B5:85:59:70
 uint8_t broadcastAddress[] = {0x30, 0xAE, 0xA4, 0xEF, 0xB9, 0xE4};
@@ -42,6 +49,7 @@ void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {
 }
  
 void setup() {
+  reg_b = READ_PERI_REG(SENS_SAR_READ_CTRL2_REG);
   // Set device as a Wi-Fi Station
   WiFi.mode(WIFI_STA);
   // Init ESP-NOW
@@ -86,7 +94,11 @@ void loop() {
 
 void get_temp(){
   tempReadings.id = 1;
-  tempReadings.t1 = analogRead(13);
+  
+  WRITE_PERI_REG(SENS_SAR_READ_CTRL2_REG, reg_b);
+  tempReadings.t1 = analogRead(PIN);
+
+  //tempReadings.t1 = analogRead(13);
   //tempReadings.t1 = max1.temperature(RNOMINAL, RREF);
   tempReadings.t2 = analogRead(12);
   tempReadings.t3 = analogRead(14);
@@ -103,3 +115,4 @@ void get_temp(){
   Serial.println(tempReadings.t6); 
   //Serial.println();
 }
+
