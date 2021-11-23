@@ -4,13 +4,9 @@
 // se agregan las librerias que permiten el enlace inalambrico
 #include <esp_now.h>
 #include <WiFi.h>
-
 #include "esp32-hal-adc.h" // needed for adc pin reset
 #include "soc/sens_reg.h" // needed for adc pin reset
 uint64_t reg_b; // Used to store Pin registers
-
-#define PIN 13 // Set ADC2 Pin here
-int value;
 
 //  THE MAC Address of your receiver 
 //  Mi receptor será  8C:AA:B5:85:59:70
@@ -47,7 +43,7 @@ void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
 // Callback when data is received from esp_now() and sent to LED
 void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {
 }
- 
+
 void setup() {
   reg_b = READ_PERI_REG(SENS_SAR_READ_CTRL2_REG);
   // Set device as a Wi-Fi Station
@@ -94,14 +90,10 @@ void loop() {
 
 void get_temp(){
   tempReadings.id = 1;
-  
-WRITE_PERI_REG(SENS_SAR_READ_CTRL2_REG, reg_b);
-//VERY IMPORTANT: DO THIS TO NOT HAVE INVERTED VALUES!
-SET_PERI_REG_MASK(SENS_SAR_READ_CTRL2_REG, SENS_SAR2_DATA_INV);
-  tempReadings.t1 = analogRead(PIN);
-
-  //tempReadings.t1 = analogRead(13);
-  //tempReadings.t1 = max1.temperature(RNOMINAL, RREF);
+  WRITE_PERI_REG(SENS_SAR_READ_CTRL2_REG, reg_b);
+  //VERY IMPORTANT: DO THIS TO NOT HAVE INVERTED VALUES!
+  SET_PERI_REG_MASK(SENS_SAR_READ_CTRL2_REG, SENS_SAR2_DATA_INV);
+  tempReadings.t1 = analogRead(13);
   tempReadings.t2 = analogRead(12);
   tempReadings.t3 = analogRead(14);
   tempReadings.t4 = analogRead(27);
@@ -115,6 +107,5 @@ SET_PERI_REG_MASK(SENS_SAR_READ_CTRL2_REG, SENS_SAR2_DATA_INV);
   Serial.println(tempReadings.t4);
   Serial.println(tempReadings.t5);
   Serial.println(tempReadings.t6); 
-  //Serial.println();
 }
 
