@@ -95,7 +95,9 @@ void loop() {
 void get_temp(){
   tempReadings.id = 1;
   
-  WRITE_PERI_REG(SENS_SAR_READ_CTRL2_REG, reg_b);
+WRITE_PERI_REG(SENS_SAR_READ_CTRL2_REG, reg_b);
+//VERY IMPORTANT: DO THIS TO NOT HAVE INVERTED VALUES!
+SET_PERI_REG_MASK(SENS_SAR_READ_CTRL2_REG, SENS_SAR2_DATA_INV);
   tempReadings.t1 = analogRead(PIN);
 
   //tempReadings.t1 = analogRead(13);
