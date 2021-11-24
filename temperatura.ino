@@ -93,12 +93,12 @@ int aproximacion (int lectura_analogica){
   float p[10] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
   float acc = 0;
   for(int i = 0; i < grado; i++){
-    float x = p[i]*POW(lectura_analogica, grado-i);
+    float x = p[i]*pow(lectura_analogica, grado-i);
     Serial.print(lectura_analogica);
     Serial.print(" elevado a ");
     Serial.print(grado-i);
     Serial.print(" es ");
-    Serial.println(POW(lectura_analogica, grado-i));
+    Serial.println(pow(lectura_analogica, grado-i));
     Serial.print("El termino numero ");
     Serial.print(i+1);
     Serial.print(" es ");
