@@ -88,24 +88,43 @@ void loop() {
   delay(500);
 }
 
+int aproximacion (int lectura_analogica){
+  int grado = 10;
+  float p[10] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+  float acc = 0;
+  for(int i = 0; i < grado; i++){
+    float x = p[i]*POW(lectura_analogica, grado-i);
+    Serial.print(lectura_analogica);
+    Serial.print(" elevado a ");
+    Serial.print(grado-i);
+    Serial.print(" es ");
+    Serial.println(POW(lectura_analogica, grado-i));
+    Serial.print("El termino numero ");
+    Serial.print(i+1);
+    Serial.print(" es ");
+    Serial.println(x);
+    Serial.println("El acumulador es ");
+    acc = acc + x;
+    Serial.println(acc);
+    p[i] = (lectura_analogica * (10 - i)) / 10;
+  }
+  Serial.println("El termno independiente es ");
+  Serial.println(p[grado]);
+  acc= acc + p[grado];
+  Serial.println("El acumulador que es el resultado es ");
+  Serial.println(acc);
+}
+
+
 void get_temp(){
   tempReadings.id = 1;
   WRITE_PERI_REG(SENS_SAR_READ_CTRL2_REG, reg_b);
   //VERY IMPORTANT: DO THIS TO NOT HAVE INVERTED VALUES!
   SET_PERI_REG_MASK(SENS_SAR_READ_CTRL2_REG, SENS_SAR2_DATA_INV);
   tempReadings.t1 = analogRead(13);
-  tempReadings.t2 = analogRead(12);
-  tempReadings.t3 = analogRead(14);
-  tempReadings.t4 = analogRead(27);
-  tempReadings.t5 = analogRead(26);
-  tempReadings.t6 = analogRead(25);
+  aproximacion (tempReadings.t1);
   Serial.print("lectura de temperatura");
   Serial.println();
   Serial.println(tempReadings.t1);
-  Serial.println(tempReadings.t2);
-  Serial.println(tempReadings.t3);
-  Serial.println(tempReadings.t4);
-  Serial.println(tempReadings.t5);
-  Serial.println(tempReadings.t6); 
 }
 
